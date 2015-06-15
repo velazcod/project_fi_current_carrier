@@ -5,6 +5,8 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
@@ -66,9 +68,19 @@ public class NetworkIntentService extends IntentService {
     private void updateNotification(String carrierName) {
         Log.d(TAG, "updateNotification()");
 
+        int drawableIcon = R.mipmap.ic_launcher;
+        if (carrierName.contains("Sprint")) {
+            drawableIcon = R.drawable.logo_sprint;
+        } else if (carrierName.contains("T-Mobile")) {
+            drawableIcon = R.drawable.logo_tmo;
+        }
+
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), drawableIcon);
+
         Notification notification = new Notification.Builder(this)
-                .setContentTitle("Project FI Carrier")
+                .setContentTitle(getString(R.string.app_name))
                 .setContentText(carrierName)
+                .setLargeIcon(icon)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setOngoing(true)
                 .setPriority(Notification.PRIORITY_MIN)
